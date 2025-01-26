@@ -1,4 +1,4 @@
-import Node from "./node";
+import Node, { valuesOfNodes } from "./node";
 
 export default class BinaryTree<T> {
   root?: Node<T>
@@ -50,6 +50,18 @@ export default class BinaryTree<T> {
   toPostorder(): T[] {
     return [...this.postorderValues()];
   }
+
+  bfsNodes(): Generator<Node<T>> {
+    return bfsNodesOf(this);
+  }
+
+  bfsValues(): Generator<T> {
+    return bfsValuesOf(this);
+  }
+
+  toBfs(): T[] {
+    return [...this.bfsValues()];
+  }
 }
 
 function* preorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
@@ -64,11 +76,7 @@ function* preorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
   }
 }
 
-function* preorderValuesOf<T>(tree: BinaryTree<T>): Generator<T> {
-  for (const node of preorderNodesOf(tree)) {
-    yield node.value;
-  }
-}
+const preorderValuesOf = <T>(tree: BinaryTree<T>) => valuesOfNodes(preorderNodesOf(tree));
 
 function* inorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
   if (!tree.root)
@@ -90,11 +98,7 @@ function* inorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
   }
 }
 
-function* inorderValuesOf<T>(tree: BinaryTree<T>): Generator<T> {
-  for (const node of inorderNodesOf(tree)) {
-    yield node.value;
-  }
-}
+const inorderValuesOf = <T>(tree: BinaryTree<T>) => valuesOfNodes(inorderNodesOf(tree));
 
 function* postorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
   if (!tree.root)
@@ -122,11 +126,21 @@ function* postorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
   }
 }
 
-function* postorderValuesOf<T>(tree: BinaryTree<T>): Generator<T> {
-  for (const node of postorderNodesOf(tree)) {
-    yield node.value;
+const postorderValuesOf = <T>(tree: BinaryTree<T>) => valuesOfNodes(postorderNodesOf(tree));
+
+function* bfsNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
+  if (!tree.root)
+    return;
+  const bfs: Node<T>[] = [tree.root];
+  while (bfs.length >= 1) {
+    const node = bfs.splice(0, 1)[0];
+    yield node;
+    if (node.left) bfs.push(node.left);
+    if (node.right) bfs.push(node.right);
   }
 }
+
+const bfsValuesOf = <T>(tree: BinaryTree<T>) => valuesOfNodes(bfsNodesOf(tree));
 
 function inorderValuesToIndices<T>(inorder: T[]): Map<T, number> {
   const map = new Map<T, number>();

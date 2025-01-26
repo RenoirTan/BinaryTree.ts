@@ -1,15 +1,17 @@
-import { makeTreeWikipedia } from "./utils";
-
-const wikiTree = makeTreeWikipedia();
+import { wikiTree } from "./utils";
 
 test("preorder test wikipedia", () => {
-  expect(wikiTree.toPreorder()).toStrictEqual(["F", "B", "A", "D", "C", "E", "G", "I", "H"]);
+  expect(wikiTree.tree.toPreorder()).toStrictEqual(wikiTree.preorder);
 });
 
 test("inorder test wikipedia", () => {
-  expect(wikiTree.toInorder()).toStrictEqual(["A", "B", "C", "D", "E", "F", "G", "H", "I"]);
+  expect(wikiTree.tree.toInorder()).toStrictEqual(wikiTree.inorder);
 });
 
 test("postorder test wikipedia", () => {
-  expect(wikiTree.toPostorder()).toStrictEqual(["A", "C", "E", "D", "B", "H", "I", "G", "F"]);
+  expect(wikiTree.tree.toPostorder()).toStrictEqual(wikiTree.postorder);
+});
+
+test("bfs test wikipedia", () => {
+  expect(wikiTree.tree.toBfs()).toStrictEqual(wikiTree.bfs);
 });

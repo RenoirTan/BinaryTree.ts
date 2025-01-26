@@ -9,3 +9,9 @@ export default class Node<T> {
     this.right = right;
   }
 }
+
+export function* valuesOfNodes<T>(nodes: Iterable<Node<T>>): Generator<T> {
+  for (const node of nodes) {
+    yield node.value;
+  }
+}
