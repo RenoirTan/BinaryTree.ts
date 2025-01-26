@@ -14,3 +14,8 @@ test("creation from postorder and inorder wikipedia", () => {
   expect(generated.toInorder()).toStrictEqual(wikiTree.inorder);
   expect(generated.toPostorder()).toStrictEqual(wikiTree.postorder);
 });
+
+test("creation from flattened wikipedia", () => {
+  const generated = BinaryTree.fromFlattened(wikiTree.flattened);
+  expect(generated.toFlattened()).toStrictEqual(wikiTree.flattened);
+});

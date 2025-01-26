@@ -15,6 +15,10 @@ export default class BinaryTree<T> {
     return fromPostAndInorder(postorder, inorder);
   }
 
+  static fromFlattened<T>(flattened: (T | undefined)[]): BinaryTree<T> {
+    return fromFlattened(flattened);
+  }
+
   preorderNodes(): Generator<Node<T>> {
     return preorderNodesOf(this);
   }
@@ -227,4 +231,22 @@ export function fromPostAndInorder<T>(postorder: T[], inorder: T[]): BinaryTree<
   }
 
   return new BinaryTree(inner(postorder.length - 1, 0, postorder.length - 1));
+}
+
+export function fromFlattened<T>(flattened: (T | undefined)[]): BinaryTree<T> {
+  if (!flattened)
+    return new BinaryTree(undefined);
+  const nodeArray = flattened.map(value => (value) ? new Node(value) : undefined);
+  for (let i = 1; i < nodeArray.length; i++) { // skip root
+    const node = nodeArray[i]
+    if (!node) continue;
+    const parentIndex = (i - 1) >> 1;
+    const parent = nodeArray[parentIndex]!;
+    if ((i & 1) === 1) {
+      parent.left = node;
+    } else {
+      parent.right = node;
+    }
+  }
+  return new BinaryTree(nodeArray[0]);
 }
