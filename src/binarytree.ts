@@ -15,6 +15,10 @@ export default class BinaryTree<T> {
     return preorderValuesOf(this);
   }
 
+  toPreorder(): T[] {
+    return [...this.preorderValues()];
+  }
+
   inorderNodes(): Generator<Node<T>> {
     return inorderNodesOf(this);
   }
@@ -23,12 +27,20 @@ export default class BinaryTree<T> {
     return inorderValuesOf(this);
   }
 
+  toInorder(): T[] {
+    return [...this.inorderValues()];
+  }
+
   postorderNodes(): Generator<Node<T>> {
     return postorderNodesOf(this);
   }
 
   postorderValues(): Generator<T> {
     return postorderValuesOf(this);
+  }
+
+  toPostorder(): T[] {
+    return [...this.postorderValues()];
   }
 }
 
