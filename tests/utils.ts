@@ -1,7 +1,7 @@
 import BinaryTree from "../src/binarytree";
 import Node from "../src/node";
 
-function makeTree(): BinaryTree<string> {
+export function makeTreeWikipedia(): BinaryTree<string> {
   const root = new Node("F");
   root.left = new Node("B");
   root.left.left = new Node("A");
@@ -13,8 +13,3 @@ function makeTree(): BinaryTree<string> {
   root.right.right.left = new Node("H");
   return new BinaryTree(root);
 }
-
-test("preorder test 0", () => {
-  expect([...makeTree().preorderValues()])
-    .toStrictEqual(["F", "B", "A", "D", "C", "E", "G", "I", "H"]);
-});

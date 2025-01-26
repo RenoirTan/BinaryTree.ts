@@ -14,6 +14,14 @@ export default class BinaryTree<T> {
   preorderValues(): Generator<T> {
     return preorderValuesOf(this);
   }
+
+  inorderNodes(): Generator<Node<T>> {
+    return inorderNodesOf(this);
+  }
+
+  inorderValues(): Generator<T> {
+    return inorderValuesOf(this);
+  }
 }
 
 function* preorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
@@ -30,6 +38,32 @@ function* preorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
 
 function* preorderValuesOf<T>(tree: BinaryTree<T>): Generator<T> {
   for (const node of preorderNodesOf(tree)) {
+    yield node.value;
+  }
+}
+
+function* inorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
+  if (!tree.root)
+    return;
+  const dfs: Node<T>[] = [];
+  function stackLefts(node?: Node<T>) {
+    while (node) {
+      dfs.push(node);
+      node = node.left;
+    }
+  }
+  stackLefts(tree.root);
+  while (dfs.length >= 1) {
+    const node = dfs.pop()!;
+    yield node;
+    if (node.right) {
+      stackLefts(node.right);
+    }
+  }
+}
+
+function* inorderValuesOf<T>(tree: BinaryTree<T>): Generator<T> {
+  for (const node of inorderNodesOf(tree)) {
     yield node.value;
   }
 }
