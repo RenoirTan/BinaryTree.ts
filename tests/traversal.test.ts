@@ -15,3 +15,7 @@ test("postorder test wikipedia", () => {
 test("bfs test wikipedia", () => {
   expect(wikiTree.tree.toBfs()).toStrictEqual(wikiTree.bfs);
 });
+
+test("flattened test wikipedia", () => {
+  expect(wikiTree.tree.toFlattened()).toStrictEqual(wikiTree.flattened);
+});

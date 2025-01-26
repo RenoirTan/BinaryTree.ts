@@ -20,5 +20,11 @@ export const wikiTree = {
   preorder: ["F", "B", "A", "D", "C", "E", "G", "I", "H"],
   inorder: ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
   postorder: ["A", "C", "E", "D", "B", "H", "I", "G", "F"],
-  bfs: ["F", "B", "G", "A", "D", "I", "C", "E", "H"]
+  bfs: ["F", "B", "G", "A", "D", "I", "C", "E", "H"],
+  flattened: [
+    "F",
+    "B", "G",
+    "A", "D", undefined, "I",
+    undefined, undefined, "C", "E", undefined, undefined, "H", undefined
+  ]
 };

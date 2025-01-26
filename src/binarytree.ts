@@ -62,6 +62,14 @@ export default class BinaryTree<T> {
   toBfs(): T[] {
     return [...this.bfsValues()];
   }
+
+  toFlattenedNodes(): (Node<T> | undefined)[] {
+    return flattenedNodesOf(this);
+  }
+
+  toFlattened(): (T | undefined)[] {
+    return flattenedValuesOf(this);
+  }
 }
 
 function* preorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
@@ -141,6 +149,39 @@ function* bfsNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
 }
 
 const bfsValuesOf = <T>(tree: BinaryTree<T>) => valuesOfNodes(bfsNodesOf(tree));
+
+function flattenedNodesOf<T>(tree: BinaryTree<T>): (Node<T> | undefined)[] {
+  if (!tree.root)
+    return [];
+  const bfs: {node: Node<T>, index: number}[] = [{ node: tree.root, index: 0 }];
+  const flattened: (Node<T> | undefined)[] = [tree.root];
+  function addLayer() {
+    const length = flattened.length + 1;
+    for (let i = 0; i < length; i++) {
+      flattened.push(undefined);
+    }
+  }
+  while (bfs.length >= 1) {
+    const { node, index } = bfs.splice(0, 1)[0];
+    if (node.left) {
+      const leftNodeIndex = index * 2 + 1;
+      if (leftNodeIndex >= flattened.length) addLayer();
+      flattened[leftNodeIndex] = node.left;
+      bfs.push({ node: node.left, index: leftNodeIndex });
+    }
+    if (node.right) {
+      const rightNodeIndex = index * 2 + 2;
+      if (rightNodeIndex >= flattened.length) addLayer();
+      flattened[rightNodeIndex] = node.right;
+      bfs.push({ node: node.right, index: rightNodeIndex });
+    }
+  }
+  return flattened;
+}
+
+function flattenedValuesOf<T>(tree: BinaryTree<T>): (T | undefined)[] {
+  return flattenedNodesOf(tree).map(node => (node) ? node.value : undefined);
+}
 
 function inorderValuesToIndices<T>(inorder: T[]): Map<T, number> {
   const map = new Map<T, number>();
