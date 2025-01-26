@@ -11,6 +11,10 @@ export default class BinaryTree<T> {
     return fromPreAndInorder(preorder, inorder);
   }
 
+  static fromPostAndInorder<T>(postorder: T[], inorder: T[]): BinaryTree<T> {
+    return fromPostAndInorder(postorder, inorder);
+  }
+
   preorderNodes(): Generator<Node<T>> {
     return preorderNodesOf(this);
   }
@@ -140,7 +144,7 @@ export function fromPreAndInorder<T>(preorder: T[], inorder: T[]): BinaryTree<T>
       return undefined;
     const value = preorder[pidx];
     if (start == end)
-      return (value) ? new Node(value) : undefined;
+      return new Node(value);
     const iidx = iv2i.get(value)!;
     const left = inner(pidx+1, start, iidx-1);
     const leftSize = iidx - start;
@@ -148,5 +152,24 @@ export function fromPreAndInorder<T>(preorder: T[], inorder: T[]): BinaryTree<T>
     return new Node(value, left, right);
   }
 
-  return new BinaryTree(inner(0, 0, preorder.length));
+  return new BinaryTree(inner(0, 0, preorder.length - 1));
+}
+
+export function fromPostAndInorder<T>(postorder: T[], inorder: T[]): BinaryTree<T> {
+  const iv2i = inorderValuesToIndices(inorder);
+
+  function inner(pidx: number, start: number, end: number): Node<T> | undefined {
+    if (start > end)
+      return undefined;
+    const value = postorder[pidx];
+    if (start == end)
+      return (value) ? new Node(value) : undefined;
+    const iidx = iv2i.get(value)!;
+    const right = inner(pidx-1, iidx+1, end);
+    const rightSize = end - iidx;
+    const left = inner(pidx-rightSize-1, start, iidx-1);
+    return new Node(value, left, right);
+  }
+
+  return new BinaryTree(inner(postorder.length - 1, 0, postorder.length - 1));
 }
