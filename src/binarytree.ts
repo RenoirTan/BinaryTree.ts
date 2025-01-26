@@ -74,6 +74,15 @@ export default class BinaryTree<T> {
   toFlattened(): (T | undefined)[] {
     return flattenedValuesOf(this);
   }
+
+  invert() {
+    for (const node of this.bfsNodes()) {
+      const left = node.left;
+      const right = node.right;
+      node.left = right;
+      node.right = left;
+    }
+  }
 }
 
 function* preorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
