@@ -7,6 +7,10 @@ export default class BinaryTree<T> {
     this.root = root;
   }
 
+  static fromPreAndInorder<T>(preorder: T[], inorder: T[]): BinaryTree<T> {
+    return fromPreAndInorder(preorder, inorder);
+  }
+
   preorderNodes(): Generator<Node<T>> {
     return preorderNodesOf(this);
   }
@@ -118,4 +122,31 @@ function* postorderValuesOf<T>(tree: BinaryTree<T>): Generator<T> {
   for (const node of postorderNodesOf(tree)) {
     yield node.value;
   }
+}
+
+function inorderValuesToIndices<T>(inorder: T[]): Map<T, number> {
+  const map = new Map<T, number>();
+  for (let i = 0; i < inorder.length; i++) {
+    map.set(inorder[i], i);
+  }
+  return map;
+}
+
+export function fromPreAndInorder<T>(preorder: T[], inorder: T[]): BinaryTree<T> {
+  const iv2i = inorderValuesToIndices(inorder);
+
+  function inner(pidx: number, start: number, end: number): Node<T> | undefined {
+    if (start > end)
+      return undefined;
+    const value = preorder[pidx];
+    if (start == end)
+      return (value) ? new Node(value) : undefined;
+    const iidx = iv2i.get(value)!;
+    const left = inner(pidx+1, start, iidx-1);
+    const leftSize = iidx - start;
+    const right = inner(pidx+leftSize+1, iidx+1, end);
+    return new Node(value, left, right);
+  }
+
+  return new BinaryTree(inner(0, 0, preorder.length));
 }
