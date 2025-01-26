@@ -21,7 +21,7 @@ function* preorderNodesOf<T>(tree: BinaryTree<T>): Generator<Node<T>> {
     return;
   const dfs: Node<T>[] = [tree.root];
   while (dfs.length >= 1) {
-    const node = dfs.splice(0, 1)[0];
+    const node = dfs.pop()!;
     yield node;
     if (node.right) dfs.push(node.right);
     if (node.left) dfs.push(node.left);

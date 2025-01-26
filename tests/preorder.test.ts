@@ -14,7 +14,7 @@ function makeTree(): BinaryTree<string> {
   return new BinaryTree(root);
 }
 
-describe("preorder test 0", () => {
+test("preorder test 0", () => {
   expect([...makeTree().preorderValues()])
-    .toBe(["F", "B", "A", "D", "C", "E", "G", "I", "H"]);
+    .toStrictEqual(["F", "B", "A", "D", "C", "E", "G", "I", "H"]);
 });
