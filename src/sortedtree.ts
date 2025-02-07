@@ -18,6 +18,14 @@ export default class SortedTree<T> extends BinaryTree<T> {
       insertInTree(this.root, value, this.compare);
     }
   }
+
+  searchNode(value: T): Node<T> | undefined {
+    return this.root ? searchInTree(this.root, value, this.compare) : undefined;
+  }
+
+  searchValue(value: T): T | undefined {
+    return this.searchNode(value)?.value;
+  }
 }
 
 function insertInTree<T>(node: Node<T>, value: T, compare: Compare<T>) {
@@ -34,5 +42,18 @@ function insertInTree<T>(node: Node<T>, value: T, compare: Compare<T>) {
     } else {
       node.right = new Node(value);
     }
+  }
+}
+
+function searchInTree<T>(node: Node<T>, value: T, compare: Compare<T>): Node<T> | undefined {
+  const rocket = compare(value, node.value);
+  if (rocket === 0) {
+    return node;
+  } else if (rocket < 0 && node.left) {
+    return searchInTree(node.left, value, compare);
+  } else if (rocket > 0 && node.right) {
+    return searchInTree(node.right, value, compare);
+  } else {
+    return undefined;
   }
 }
